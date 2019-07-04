@@ -1,0 +1,6 @@
+{
+  "mongoURI": "mongodb://tranthaison123:tranthaison123@ds347367.mlab.com:47367/son",
+  "jwtSecret": "mysecretToken",
+  "githubClientId": "9bd1ff77caed185ae98c",
+  "githubSecret": "2c11e995b1524ce4e9972fc9c8b40499b7eacd40"
+}

@@ -1,11 +1,14 @@
-import {
-  GET_PROFILE,
-  PROFILE_ERROR,
-  UPDATE_PROFILE,
-  GET_PROFILES,
-  GET_REPOS,
-} from './constant';
-import { CLEAR_PROFILE } from '../auth/constant';
+import { makeConstantCreator } from '../reduxCreator';
+
+export const ProfileTypes = makeConstantCreator(
+  'GET_PROFILE',
+  'PROFILE_ERROR',
+  'UPDATE_PROFILE',
+  'DELETE_ACCOUNT',
+  'GET_PROFILES',
+  'GET_REPOS',
+  'CLEAR_PROFILE',
+);
 
 const initialState = {
   profile: null,
@@ -18,28 +21,28 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case GET_REPOS:
+    case ProfileTypes.GET_REPOS:
       return {
         ...state,
         repos: payload,
       };
-    case GET_PROFILES:
+    case ProfileTypes.GET_PROFILES:
       return {
         ...state,
         profiles: payload,
       };
-    case GET_PROFILE:
-    case UPDATE_PROFILE:
+    case ProfileTypes.GET_PROFILE:
+    case ProfileTypes.UPDATE_PROFILE:
       return {
         ...state,
         profile: payload,
       };
-    case PROFILE_ERROR:
+    case ProfileTypes.PROFILE_ERROR:
       return {
         ...state,
         error: payload,
       };
-    case CLEAR_PROFILE:
+    case ProfileTypes.CLEAR_PROFILE:
       return {
         ...state,
         profile: null,

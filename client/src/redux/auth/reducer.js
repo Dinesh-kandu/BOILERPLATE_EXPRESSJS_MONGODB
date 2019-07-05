@@ -1,13 +1,15 @@
-import {
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  USER_LOADED,
-  AUTH_ERROR,
-  LOGIN_FAIL,
-  LOGIN_SUCCESS,
-  LOGOUT,
-} from './constant';
-import { DELETE_ACCOUNT } from '../profile/constant';
+import { makeConstantCreator } from '../reduxCreator';
+
+export const AuthTypes = makeConstantCreator(
+  'REGISTER_SUCCESS',
+  'REGISTER_FAIL',
+  'USER_LOADED',
+  'AUTH_ERROR',
+  'LOGIN_SUCCESS',
+  'LOGIN_FAIL',
+  'DELETE_ACCOUNT',
+  'LOGOUT',
+);
 
 const innitialState = {
   token: localStorage.getItem('token'),
@@ -19,25 +21,25 @@ export default function(state = innitialState, action) {
   const { payload } = action;
 
   switch (action.type) {
-    case USER_LOADED:
+    case AuthTypes.USER_LOADED:
       return {
         ...state,
         isAuth: true,
         user: payload,
       };
-    case REGISTER_SUCCESS:
-    case LOGIN_SUCCESS:
+    case AuthTypes.REGISTER_SUCCESS:
+    case AuthTypes.LOGIN_SUCCESS:
       localStorage.setItem('token', payload.token);
       return {
         ...state,
         ...payload,
         isAuth: true,
       };
-    case REGISTER_FAIL:
-    case LOGIN_FAIL:
-    case AUTH_ERROR:
-    case DELETE_ACCOUNT:
-    case LOGOUT:
+    case AuthTypes.REGISTER_FAIL:
+    case AuthTypes.LOGIN_FAIL:
+    case AuthTypes.AUTH_ERROR:
+    case AuthTypes.DELETE_ACCOUNT:
+    case AuthTypes.LOGOUT:
       localStorage.removeItem('token');
       return {
         ...state,

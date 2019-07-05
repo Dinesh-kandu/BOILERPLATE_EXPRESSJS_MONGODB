@@ -1,13 +1,15 @@
-import {
-  GET_POSTS,
-  POST_ERROR,
-  UPDATE_LIKES,
-  DELETE_POST,
-  ADD_POST,
-  GET_POST,
-  ADD_COMMENT,
-  REMOVE_COMMENT,
-} from './constant';
+import { makeConstantCreator } from '../reduxCreator';
+
+export const PostTypes = makeConstantCreator(
+  'GET_POST',
+  'GET_POSTS',
+  'POST_ERROR',
+  'DELETE_POST',
+  'ADD_POST',
+  'UPDATE_LIKES',
+  'ADD_COMMENT',
+  'REMOVE_COMMENT',
+);
 
 const initialState = {
   posts: [],
@@ -19,53 +21,47 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case GET_POSTS:
+    case PostTypes.GET_POSTS:
       return {
         ...state,
         posts: payload,
       };
-    case ADD_POST:
+    case PostTypes.ADD_POST:
       return {
         ...state,
         posts: [...state.posts, payload],
       };
-    case POST_ERROR:
+    case PostTypes.POST_ERROR:
       return {
         ...state,
         error: payload,
       };
-    case UPDATE_LIKES:
+    case PostTypes.UPDATE_LIKES:
       return {
         ...state,
-        posts: state.posts.map(post => post._id === payload.postId
-            ? { ...post, likes: payload.likes }
-            : post),
+        posts: state.posts.map(post => post._id === payload.postId ? { ...post, likes: payload.likes } : post),
       };
-    case DELETE_POST:
+    case PostTypes.DELETE_POST:
       return {
         ...state,
-        posts: state.posts.filter(
-          post => post._id !== payload,
-        ),
+        posts: state.posts.filter(post => post._id !== payload),
       };
-    case GET_POST:
+    case PostTypes.GET_POST:
       return {
         ...state,
         post: payload,
       };
-    case ADD_COMMENT:
+    case PostTypes.ADD_COMMENT:
       return {
         ...state,
         post: { ...state.post, comments: payload },
       };
-    case REMOVE_COMMENT:
+    case PostTypes.REMOVE_COMMENT:
       return {
         ...state,
         post: {
           ...state.post,
-          comments: state.post.comments.filter(
-            comment => comment.id !== payload,
-          ),
+          comments: state.post.comments.filter(comment => comment.id !== payload),
         },
       };
     default:

@@ -8,10 +8,11 @@ const {
 const request = require('request');
 const config = require('config');
 const Profile = require('../../models /Profile');
+const Post = require('../../models /Post');
 const auth = require('../../middleware/auth');
 const User = require('../../models /User');
 
-router.get('/me', auth, async(req, res) => {
+router.get('/me', auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
       user: req.user.id,
@@ -28,7 +29,7 @@ router.get('/me', auth, async(req, res) => {
   }
 });
 
-router.get('/', async(req, res) => {
+router.get('/', async (req, res) => {
   try {
     const profiles = await Profile.find().populate('user', [
       'name',
@@ -41,7 +42,7 @@ router.get('/', async(req, res) => {
   }
 });
 
-router.get('/user/:user_id', async(req, res) => {
+router.get('/user/:user_id', async (req, res) => {
   try {
     const profile = await Profile.findOne({
       user: req.params.user_id,
@@ -71,7 +72,7 @@ router.post(
         .isEmpty(),
     ],
   ],
-  async(req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res
@@ -142,17 +143,17 @@ router.post(
   },
 );
 
-router.get('/user/:user_id', async(req, res) => {
+router.get('/user/:user_id', async (req, res) => {
   try {
     const profile = await Profile.findOne({
       user: req.params.user_id,
     }).populate('user', ['name', 'avatar']);
 
     if (!profile) {
- return res
+      return res
         .status(400)
         .json({ msg: 'Profile not found' });
-}
+    }
 
     res.json(profile);
   } catch (error) {
@@ -166,7 +167,7 @@ router.get('/user/:user_id', async(req, res) => {
   }
 });
 
-router.delete('/', auth, async(req, res) => {
+router.delete('/', auth, async (req, res) => {
   try {
     await Post.deleteMany({ user: req.user.id });
     await Profile.findOneAndRemove({ user: req.user.id });
@@ -194,7 +195,7 @@ router.put(
         .isEmpty(),
     ],
   ],
-  async(req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.status(400).json({ errors: errors.array() });
@@ -240,7 +241,7 @@ router.put(
 router.delete(
   '/experience/:exp_id',
   auth,
-  async(req, res) => {
+  async (req, res) => {
     try {
       const profile = await Profile.findOne({
         user: req.user.id,
@@ -256,7 +257,7 @@ router.delete(
 
       res.json(profile);
     } catch (error) {
-      console.error(err.message);
+      console.error(error.message);
       res.status(500).send('Server Error');
     }
   },
@@ -281,7 +282,7 @@ router.put(
         .isEmpty(),
     ],
   ],
-  async(req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.status(400).json({ errors: errors.array() });
@@ -327,7 +328,7 @@ router.put(
 router.delete(
   '/education/:edu_id',
   auth,
-  async(req, res) => {
+  async (req, res) => {
     try {
       const profile = await Profile.findOne({
         user: req.user.id,
@@ -343,7 +344,7 @@ router.delete(
 
       res.json(profile);
     } catch (error) {
-      console.error(err.message);
+      console.error(error.message);
       res.status(500).send('Server Error');
     }
   },
@@ -356,8 +357,8 @@ router.get('/github/:username', (req, res) => {
         req.params.username
       }/repos?per_page=5&sort=created:
       asc&client_id=${config.get(
-        'githubClientId',
-      )}&client_secret=${config.get('githubSecret')}`,
+    'githubClientId',
+  )}&client_secret=${config.get('githubSecret')}`,
       method: 'GET',
       headers: { 'user-agent': 'node.js' },
     };
@@ -372,7 +373,7 @@ router.get('/github/:username', (req, res) => {
       res.json(JSON.parse(body));
     });
   } catch (error) {
-    console.error(err.message);
+    console.error(error.message);
     res.status(500).send('Server Error');
   }
 });

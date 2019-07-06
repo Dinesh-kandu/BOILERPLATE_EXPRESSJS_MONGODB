@@ -19,7 +19,7 @@ router.post(
         .isEmpty(),
     ],
   ],
-  async(req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res
@@ -47,7 +47,7 @@ router.post(
   },
 );
 
-router.get('/', auth, async(req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const post = await Post.find().sort({ date: -1 });
     res.json(post);
@@ -57,7 +57,7 @@ router.get('/', auth, async(req, res) => {
   }
 });
 
-router.get('/:id', auth, async(req, res) => {
+router.get('/:id', auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
@@ -80,7 +80,7 @@ router.get('/:id', auth, async(req, res) => {
   }
 });
 
-router.delete('/:id', auth, async(req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
@@ -98,7 +98,7 @@ router.delete('/:id', auth, async(req, res) => {
   }
 });
 
-router.put('/like/:id', auth, async(req, res) => {
+router.put('/like/:id', auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (
@@ -121,7 +121,7 @@ router.put('/like/:id', auth, async(req, res) => {
   }
 });
 
-router.put('/unlike/:id', auth, async(req, res) => {
+router.put('/unlike/:id', auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (
@@ -158,7 +158,7 @@ router.post(
         .isEmpty(),
     ],
   ],
-  async(req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res
@@ -194,7 +194,7 @@ router.post(
 router.delete(
   '/comment/:id/:comment_id',
   auth,
-  async(req, res) => {
+  async (req, res) => {
     try {
       const post = await Post.findById(req.params.id);
       const comment = post.comments.find(

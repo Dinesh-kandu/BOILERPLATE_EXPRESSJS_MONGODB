@@ -8,7 +8,7 @@ const config = require('config');
 const User = require('../../models /User');
 const auth = require('../../middleware/auth');
 
-router.get('/', auth, async(req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
     res.json(user);
@@ -21,7 +21,7 @@ router.get('/', auth, async(req, res) => {
 router.post('/', [
   check('email', 'Please include a valid email').isEmail(),
   check('password', 'Password is required').exists(),
-], async(req, res) => {
+], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });

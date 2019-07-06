@@ -10,17 +10,13 @@ import ProfileGithub from './ProfileGithub';
 import { getProfileById } from '../../redux/profile/action';
 
 const Profile = ({
-  match,
-  profile: { profile },
-  auth,
-  getProfileById,
+ match, profile: { profile }, auth, getProfileById,
 }) => {
   useEffect(() => {
     getProfileById(match.params.id);
   }, [getProfileById, match]);
   return (
-    <Fragment>
-      (
+    profile && (
       <Fragment>
         <Link to="/profiles" className="btn btn-light">
           Back To Profiles
@@ -38,10 +34,7 @@ const Profile = ({
             {profile.experience.length > 0 ? (
               <Fragment>
                 {profile.experience.map(experience => (
-                  <ProfileExperience
-                    key={experience._id}
-                    experience={experience}
-                  />
+                  <ProfileExperience key={experience._id} experience={experience} />
                 ))}
               </Fragment>
             ) : (
@@ -50,27 +43,20 @@ const Profile = ({
           </div>
           <div className="profile-edu bg-white p-2">
             <h2 className="text-primary"> Education </h2>
-            {profile.education.length > 0 ? (
+            {profile && profile.education.length > 0 ? (
               <Fragment>
                 {profile.education.map(education => (
-                  <ProfileEducation
-                    key={education._id}
-                    education={education}
-                  />
+                  <ProfileEducation key={education._id} education={education} />
                 ))}
               </Fragment>
             ) : (
               <h4> No education credentials</h4>
             )}
           </div>
-
-          {profile.githubusername && (
-            <ProfileGithub username={profile.username} />
-          )}
+          {profile.githubusername && <ProfileGithub username={profile.githubusername} />}
         </div>
       </Fragment>
-      )}
-    </Fragment>
+    )
   );
 };
 

@@ -104,18 +104,10 @@ export const removeLike = postId => async dispatch => {
 
 export const deletePost = id => async dispatch => {
   try {
-    dispatch({
-      type: CHANGE_LOADING,
-      payload: true,
-    });
     await axios.delete(`/api/posts/${id}`);
     dispatch({
       type: PostTypes.DELETE_POST,
       payload: id,
-    });
-    dispatch({
-      type: CHANGE_LOADING,
-      payload: false,
     });
     dispatch(setAlert('Post Removed', 'success'));
   } catch (error) {
@@ -192,8 +184,6 @@ export const addComment = (postId, formData) => async dispatch => {
 };
 
 export const deleteComment = (postId, commentId) => async dispatch => {
-  console.log(postId);
-  console.log(commentId);
   try {
     dispatch({
       type: CHANGE_LOADING,

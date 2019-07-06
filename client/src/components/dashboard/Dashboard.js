@@ -2,23 +2,23 @@ import React, { useEffect, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  getCurrentProfile,
-  deleteAccount,
-} from '../../redux/profile/action';
+import InlineConfirmButton from 'react-inline-confirm';
+import { getCurrentProfile, deleteAccount } from '../../redux/profile/action';
 import DashboardActions from './DashboardActions';
 import Experience from './Experience';
 import Education from './Education';
 
+const textValues = ['Delete Account', 'Are you sure?', 'Deleting...'];
+
 const Dashboard = ({
-  getCurrentProfile,
-  deleteAccount,
-  auth: { user },
-  profile: { profile },
+ getCurrentProfile, deleteAccount, auth: { user }, profile: { profile },
 }) => {
   useEffect(() => {
     getCurrentProfile();
   }, [getCurrentProfile]);
+  const handleDeleteAccount = () => {
+    deleteAccount();
+  };
   return (
     <Fragment>
       <h1 className="∏"> Dashboard </h1>
@@ -35,27 +35,21 @@ const Dashboard = ({
           <Education education={profile.education} />
 
           <div className="my-2">
-            <button
+            <InlineConfirmButton
               className="btn btn-danger"
-              onClick={() => deleteAccount()}
+              textValues={textValues}
+              isExecuting
+              showTimer
+              onClick={handleDeleteAccount}
             >
-              <i className="fas fa-user-minus" />
-              {' '}
-Delete My
-              Account
-            </button>
+              <i className="fa fa-$ fa fa-trash" />
+            </InlineConfirmButton>
           </div>
         </Fragment>
       ) : (
         <Fragment>
-          <p>
-            You have not yet setup a profile, please add
-            some info
-          </p>
-          <Link
-            to="/create-profile"
-            className="btn btn-primary my-1"
-          >
+          <p>You have not yet setup a profile, please add some info</p>
+          <Link to="/create-profile" className="btn btn-primary my-1">
             Create profile
           </Link>
         </Fragment>

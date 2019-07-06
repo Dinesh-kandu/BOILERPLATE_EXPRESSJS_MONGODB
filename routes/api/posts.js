@@ -1,8 +1,9 @@
 const express = require('express');
+
 const router = express.Router();
 const {
   check,
-  validationResult
+  validationResult,
 } = require('express-validator');
 const auth = require('../../middleware/auth');
 const Post = require('../../models /Post');
@@ -15,10 +16,10 @@ router.post(
     [
       check('text', 'Text is required')
         .not()
-        .isEmpty()
-    ]
+        .isEmpty(),
+    ],
   ],
-  async (req, res) => {
+  async(req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res
@@ -28,14 +29,14 @@ router.post(
 
     try {
       const user = await User.findById(req.user.id).select(
-        '-password'
+        '-password',
       );
 
       const newPost = new Post({
         text: req.body.text,
         name: user.name,
         avatar: user.avatar,
-        user: req.user.id
+        user: req.user.id,
       });
       const post = await newPost.save();
       res.json(post);
@@ -43,10 +44,10 @@ router.post(
       console.error(error.messeage);
       res.status(500).send('Server Error');
     }
-  }
+  },
 );
 
-router.get('/', auth, async (req, res) => {
+router.get('/', auth, async(req, res) => {
   try {
     const post = await Post.find().sort({ date: -1 });
     res.json(post);
@@ -56,7 +57,7 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-router.get('/:id', auth, async (req, res) => {
+router.get('/:id', auth, async(req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
@@ -79,7 +80,7 @@ router.get('/:id', auth, async (req, res) => {
   }
 });
 
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', auth, async(req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
@@ -97,12 +98,12 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-router.put('/like/:id', auth, async (req, res) => {
+router.put('/like/:id', auth, async(req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (
       post.likes.filter(
-        like => like.user.toString() === req.user.id
+        like => like.user.toString() === req.user.id,
       ).length > 0
     ) {
       return res
@@ -120,12 +121,12 @@ router.put('/like/:id', auth, async (req, res) => {
   }
 });
 
-router.put('/unlike/:id', auth, async (req, res) => {
+router.put('/unlike/:id', auth, async(req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (
       post.likes.filter(
-        like => like.user.toString() === req.user.id
+        like => like.user.toString() === req.user.id,
       ).length === 0
     ) {
       return res
@@ -154,10 +155,10 @@ router.post(
     [
       check('text', 'Text is required')
         .not()
-        .isEmpty()
-    ]
+        .isEmpty(),
+    ],
   ],
-  async (req, res) => {
+  async(req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res
@@ -167,7 +168,7 @@ router.post(
 
     try {
       const user = await User.findById(req.user.id).select(
-        '-password'
+        '-password',
       );
 
       const post = await Post.findById(req.params.id);
@@ -176,7 +177,7 @@ router.post(
         text: req.body.text,
         name: user.name,
         avatar: user.avatar,
-        user: req.user.id
+        user: req.user.id,
       };
 
       post.comments.unshift(newComment);
@@ -187,17 +188,17 @@ router.post(
       console.error(error.messeage);
       res.status(500).send('Server Error');
     }
-  }
+  },
 );
 
 router.delete(
   '/comment/:id/:comment_id',
   auth,
-  async (req, res) => {
+  async(req, res) => {
     try {
       const post = await Post.findById(req.params.id);
       const comment = post.comments.find(
-        comment => comment.id === req.params.comment_id
+        comment => comment.id === req.params.comment_id,
       );
 
       if (!comment) {
@@ -225,7 +226,7 @@ router.delete(
       console.error(error.messeage);
       res.status(500).send('Server Error');
     }
-  }
+  },
 );
 
 module.exports = router;
